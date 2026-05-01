@@ -28,10 +28,12 @@ int main(int argc, char** argv)
     while ((opt = getopt(argc, argv, OPTS)) != -1)
     {
         switch (opt) {
+            // An option is missing its value
             case ':':
                 printf("Missing value for -%c\n", optopt);
                 return 1;
 
+            // User uses the help option
             case '?':
                 if (optopt == '?')
                 {
@@ -48,16 +50,27 @@ int main(int argc, char** argv)
                 else
                 {
                     printf("Unrecognised option. Use the -? option for more information.\n");
+                    return 2;
                 }
-                return 2;
+                break;
+
+            case 'w':
+                break;
+            
+            case 'h':
+                break;
+
+            // Fallback case
             default:
+                printf("%c\n", opt);
                 printf("Correct usage: ./bmshoe [opt1, opt2, ...] file.bmp. Use the -? option for more information.\n");
                 return 3;
         }
     }
         
     // Open .bmp file for reading
-    char* f_name = argv[1];
+    char* f_name = argv[optind - 1];
+    printf("%i", optind);
     FILE* f = fopen(f_name, "r");
     if (f == NULL)
     {
